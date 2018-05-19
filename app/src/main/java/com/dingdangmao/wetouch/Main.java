@@ -1,6 +1,9 @@
 package com.dingdangmao.wetouch;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
@@ -14,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Main extends AppCompatActivity {
+
     private DrawerLayout dl;
     private NavigationView nv;
     private Adapter app;
@@ -31,23 +36,25 @@ public class Main extends AppCompatActivity {
     private db mydb=new db(this,"mydb.db",null,2);
     private ArrayList<Model> mlist=new ArrayList<Model>();
     private HashMap<Integer,String> mytag=new HashMap<Integer,String>();
+
+    private MessageReceiver receiver;
+    private IntentFilter filter;
+    private boolean refresh=true;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-
-        }
         setContentView(R.layout.activity_main);
-        //StatusBarUtil.setColor(this, Color.parseColor("#FFFFFF"));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar bar = getSupportActionBar();
         nv = (NavigationView) findViewById(R.id.drawer);
-       // nv.setItemIconTintList(null);
+
         dl = (DrawerLayout) findViewById(R.id.dl);
         StatusBarUtil.setColorForDrawerLayout(this,dl,ContextCompat.getColor(this,R.color.colorPrimary));
-        //nv.setCheckedItem(R.id.aa);
+
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
             bar.setDisplayShowTitleEnabled(false);
@@ -81,48 +88,71 @@ public class Main extends AppCompatActivity {
             }
 
         });
+
+
+        receiver=new MessageReceiver();
+        filter=new IntentFilter();
+        filter.addAction("com.dingdangmao.wetouch.REFRESH");
+        registerReceiver(receiver,filter);
+
         app = new Adapter(mlist,mytag);
         rv=(RecyclerView)findViewById(R.id.main);
         rv.setLayoutManager(new StaggeredGridLayoutManager(1,StaggeredGridLayoutManager.VERTICAL));
         rv.setAdapter(app);
-
 
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
 
         if (item.getItemId() == android.R.id.home) {
+
             dl.openDrawer(GravityCompat.START);
+
         }else if(item.getItemId() == R.id.main_add)
         {
             Intent intent=new Intent(Main.this,Add.class);
             startActivity(intent);
         }
+
         return true;
     }
     public boolean onCreateOptionsMenu(Menu menu) {
+
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.option, menu);
         return super.onCreateOptionsMenu(menu);
+
     }
+
     public void onResume(){
 
         super.onResume();
+        if(refresh) {
+            refresh=false;
+            Pool.run(new Runnable() {
+                @Override
+                public void run() {
+                    Refresh();
+                }
+            });
+        }else
+            Log.i("tag","not refresh");
+
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(receiver);
+    }
+
+
+    private void Refresh(){
+
         SQLiteDatabase write=mydb.getWritableDatabase();
         mlist.clear();
-        //Cursor cursor=write.query("money",null,null,null,null,null,"id DESC",String.valueOf(20));
         Cursor cursor=write.rawQuery("select * from money order by id DESC  limit 0,20",null);
-/*
-        cursor = write.rawQuery("select total,type,month,day from money order by id DESC",null);
-        if(cursor.moveToFirst()){
-            while (cursor.moveToNext()) {
-                float total = cursor.getFloat(0); //获取第一列的值,第一列的索引从0开始
-                Toast.makeText(Main.this, String.valueOf(total), Toast.LENGTH_SHORT).show();
-
-               // model.add(new ChartModel(total, type, String.valueOf(c.getInt(2)) + "-" + String.valueOf(c.getInt(3))));
-            }
-        }
-*/
 
         if(cursor.moveToFirst()){
             do{
@@ -143,17 +173,38 @@ public class Main extends AppCompatActivity {
         }
 
         cursor.close();
+
         mytag.clear();
+
         cursor=write.query("tag",null,null,null,null,null,null);
         if(cursor.moveToFirst()){
             do{
                 int id = cursor.getInt(cursor.getColumnIndex("id"));
                 String tag = cursor.getString(cursor.getColumnIndex("type"));
-               // Log.i("tag",tag);
                 mytag.put(id,tag);
             } while(cursor.moveToNext());
         }
         cursor.close();
-        app.notifyDataSetChanged();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                app.notifyDataSetChanged();
+            }
+        });
     }
-}
+
+    class MessageReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            Log.i("TAG", "receiver");
+
+            refresh = true;
+
+        }
+    }
+
+    }
+
+
+

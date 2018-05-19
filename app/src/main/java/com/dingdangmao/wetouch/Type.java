@@ -36,9 +36,9 @@ public class Type extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar bar = getSupportActionBar();
+
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
-            // bar.setHomeAsUpIndicator(R.drawable.menu);
             bar.setDisplayShowTitleEnabled(false);
         }
 
@@ -58,7 +58,7 @@ public class Type extends AppCompatActivity {
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String t=ed.getText().toString().trim();
+               final String t=ed.getText().toString().trim();
                 if(t.length()==0) {
                     D.tip(Type.this,"标签不能为空！");
                 }else if(t.length()>10){
@@ -68,18 +68,33 @@ public class Type extends AppCompatActivity {
                     D.tip(Type.this,"标签已存在");
 
                 }else {
-                    SQLiteDatabase read = mydb.getWritableDatabase();
-                    try {
-                        read.execSQL("insert into tag(type)values(?)", new String[]{t});
-                    }catch(Exception e){
-                        D.tip(Type.this,e.toString());
-                    }
-                    mTag.addTag(t);
-                    //String[] tags=mytag.toArray(new String[mytag.size()]);
-                    //mTagGroup.setTags(tags);
-                    mytag.add(t);
-                    ed.setText("");
-                    //D.tip(Type.this,"添加成功");
+
+                    Pool.run(new Runnable() {
+                        @Override
+                        public void run() {
+                            SQLiteDatabase read = mydb.getWritableDatabase();
+                            try {
+
+                                read.execSQL("insert into tag(type)values(?)", new String[]{t});
+
+                            }catch(Exception e){
+
+                                D.tip(Type.this,e.toString());
+                            }
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mTag.addTag(t);
+                                    mytag.add(t);
+                                    ed.setText("");
+                                }
+                            });
+
+                            //D.tip(Type.this,"添加成功");
+                        }
+                    });
+
                 }
 
             }
@@ -113,7 +128,13 @@ public class Type extends AppCompatActivity {
                     @Override
                     public void onClick(SweetAlertDialog sDialog) {
                         sDialog.dismissWithAnimation();
-                        delete(position,s);
+                        Pool.run(new Runnable() {
+                            @Override
+                            public void run() {
+                                delete(position,s);
+                            }
+                        });
+
                     }
                 }).show();
             }
@@ -127,10 +148,21 @@ public class Type extends AppCompatActivity {
     }
     public void onResume(){
         super.onResume();
+
+        Pool.run(new Runnable() {
+            @Override
+            public void run() {
+                Refresh();
+            }
+        });
+
+    }
+
+    private void Refresh(){
         SQLiteDatabase read=mydb.getWritableDatabase();
         Cursor cursor=read.query("tag",null,null,null,null,null,null);
         if(cursor.moveToFirst()){
-           do{
+            do{
                 //int id = cursor.getInt(cursor.getColumnIndex("id"));
                 String tag = cursor.getString(cursor.getColumnIndex("type"));
                 //Log.i("tag",tag);
@@ -142,7 +174,6 @@ public class Type extends AppCompatActivity {
         List<String> taglist=new ArrayList<String>();
         taglist.addAll(mytag);
         mTag.setTags(taglist);
-       // mTagGroup.setTags(tags);
 
     }
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -153,7 +184,7 @@ public class Type extends AppCompatActivity {
         }
         return true;
     }
-    private boolean delete(int position,String tag){
+    private boolean delete(final int position,final String tag){
 
         SQLiteDatabase write = mydb.getWritableDatabase();
         try {
@@ -162,9 +193,15 @@ public class Type extends AppCompatActivity {
             D.tip(this,e.toString());
             return false;
         }
-        D.tip(this,"删除成功！");
-        mTag.removeTag(position);
-        mytag.remove(tag);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                D.tip(Type.this,"删除成功！");
+                mTag.removeTag(position);
+                mytag.remove(tag);
+            }
+        });
+
         return true;
 
     }

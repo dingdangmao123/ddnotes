@@ -47,11 +47,7 @@ public class Add extends AppCompatActivity {
     private TextView money;
     private TextView tip;
     private TagContainerLayout mTag;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    private GoogleApiClient client;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +59,6 @@ public class Add extends AppCompatActivity {
             ActionBar bar = getSupportActionBar();
             if (bar != null) {
                 bar.setDisplayHomeAsUpEnabled(true);
-                // bar.setHomeAsUpIndicator(R.drawable.menu);
                 bar.setDisplayShowTitleEnabled(false);
             }
 
@@ -128,16 +123,16 @@ public class Add extends AppCompatActivity {
                         D.tip(Add.this, "你还未选择类别");
                     } else {
                         String[] tmp = timestr.split("-");
-                        //Toast.makeText(Add.this, tmp[0] + " " + tmp[1] + " " + tmp[2], Toast.LENGTH_SHORT).show();
+
                         write.execSQL("insert into money(year,month,day,total,tip,type)values(?,?,?,?,?,?)", new String[]{tmp[0], tmp[1], tmp[2], mstr,
                                 tstr, String.valueOf(cur)}
                         );
-                        //Toast.makeText(Add.this, "添加成功", Toast.LENGTH_SHORT).show();
+
+                        Intent i = new Intent("com.dingdangmao.wetouch.REFRESH");
+                        sendBroadcast(i);
                         D.tip(Add.this, "添加成功");
                         money.setText("");
                         tip.setText("");
-                        //cur = 0;
-                        //timestr = null;
                     }
                 }
             });
@@ -150,7 +145,7 @@ public class Add extends AppCompatActivity {
                     TimePickerView pvTime = new TimePickerView.Builder(Add.this, new TimePickerView.OnTimeSelectListener() {
                         @Override
                         public void onTimeSelect(Date date, View v) {//选中事件回调
-                            //tvTime.setText(getTime(date));
+
                             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                             timestr= formatter.format(date);
                             tip_date.setText(timestr);
@@ -165,9 +160,6 @@ public class Add extends AppCompatActivity {
             D.tip(this,e.toString());
         }
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -188,64 +180,18 @@ public class Add extends AppCompatActivity {
           do {
                 int id = cursor.getInt(cursor.getColumnIndex("id"));
                 String tag = cursor.getString(cursor.getColumnIndex("type"));
-               // Log.i("tag", tag + " " + String.valueOf(id));
                 type.put(tag, id);
             }  while (cursor.moveToNext());
         }
         cursor.close();
         Set<String> myset = type.keySet();
-/*
-        String[] tags = myset.toArray(new String[myset.size()+1]);
-        tags[tags.length-1]="自定义";
-        mTagGroup.setTags(tags);
-        */
+
         List<String> taglist=new ArrayList<String>();
         taglist.addAll(myset);
         taglist.add("自定义");
         mTag.setTags(taglist);
-
-        /*
-        List<String> data = new ArrayList<String>();
-        data.addAll(myset);
-        wheel.setData(data);
-        */
     }
 
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
-    public Action getIndexApiAction() {
-        Thing object = new Thing.Builder()
-                .setName("Add Page") // TODO: Define a title for the content shown.
-                // TODO: Make sure this auto-generated URL is correct.
-                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
-                .build();
-        return new Action.Builder(Action.TYPE_VIEW)
-                .setObject(object)
-                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
-                .build();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        AppIndex.AppIndexApi.start(client, getIndexApiAction());
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        AppIndex.AppIndexApi.end(client, getIndexApiAction());
-        client.disconnect();
-    }
     protected void onSaveInstanceState(Bundle outState){
         super.onSaveInstanceState(outState);
         outState.putInt("cur",cur);
