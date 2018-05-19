@@ -39,8 +39,12 @@ public class Main extends Base {
     @BindView(R.id.drawer)
     public NavigationView nv;
 
+
+    @BindView(R.id.main)
+    public RecyclerView rv;
+
+
     private Adapter app;
-    private RecyclerView rv;
     private db mydb = new db(this, "mydb.db", null, 2);
     private ArrayList<Model> mlist = new ArrayList<Model>();
     private HashMap<Integer, String> mytag = new HashMap<Integer, String>();
@@ -98,7 +102,6 @@ public class Main extends Base {
         registerReceiver(receiver, filter);
 
         app = new Adapter(mlist, mytag);
-        rv = (RecyclerView) findViewById(R.id.main);
         rv.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
         rv.setAdapter(app);
 
@@ -119,6 +122,7 @@ public class Main extends Base {
             dl.openDrawer(GravityCompat.START);
 
         } else if (item.getItemId() == R.id.main_add) {
+
             Intent intent = new Intent(Main.this, Add.class);
             startActivity(intent);
         }

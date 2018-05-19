@@ -1,5 +1,6 @@
 package com.dingdangmao.wetouch;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -43,6 +44,8 @@ public class Type extends Base {
     public TagContainerLayout mTag;
 
 
+    boolean flag=false;
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_type;
@@ -61,6 +64,7 @@ public class Type extends Base {
         }
 
         Util.toolbar(this);
+        flag=getIntent().getBooleanExtra("flag",false);
 
         mTagGroup.setOnTagClickListener(new TagGroup.OnTagClickListener() {
             @Override
@@ -108,6 +112,10 @@ public class Type extends Base {
                         }
                     });
 
+                    if(flag) {
+                        Intent i = new Intent("com.dingdangmao.wetouch.TAG");
+                        sendBroadcast(i);
+                    }
                 }
 
             }
