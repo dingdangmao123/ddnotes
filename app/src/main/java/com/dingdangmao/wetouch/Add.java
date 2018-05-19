@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -29,33 +30,57 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import butterknife.BindView;
 import co.lujun.androidtagview.TagContainerLayout;
 import co.lujun.androidtagview.TagView;
 import me.gujun.android.taggroup.TagGroup;
 
-public class Add extends AppCompatActivity {
-    private Button ok;
-    private Button date;
-    private Button tip_date;
-    private Button tip_type;
+public class Add extends Base{
+
+    @BindView(R.id.ok)
+    public Button ok;
+
+    @BindView(R.id.date)
+    public Button date;
+
+    @BindView(R.id.tip_date)
+    public Button tip_date;
+
+    @BindView(R.id.tip_type)
+    public Button tip_type;
+
+
+    @BindView(R.id.money)
+    public TextView money;
+
+    @BindView(R.id.tip)
+    public TextView tip;
+
+
+    @BindView(R.id.ttag)
+    public TagContainerLayout mTag;
+
+
+
     private db mydb = new db(this, "mydb.db", null, 3);
     private HashMap<String, Integer> type = new HashMap<String, Integer>();
     private int cur = 0;
     private String timestr;
     private TagGroup mTagGroup;
     private WheelPicker wheel;
-    private TextView money;
-    private TextView tip;
-    private TagContainerLayout mTag;
+
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public int getLayoutId() {
+        return R.layout.activity_main;
+    }
+
+
+    @Override
+    public void init(@Nullable Bundle savedInstanceState) {
         try {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_add);
-            Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            setSupportActionBar(toolbar);
+
             ActionBar bar = getSupportActionBar();
             if (bar != null) {
                 bar.setDisplayHomeAsUpEnabled(true);
@@ -64,17 +89,13 @@ public class Add extends AppCompatActivity {
 
             Util.toolbar(this);
 
-            money = (TextView) findViewById(R.id.money);
-            tip = (TextView) findViewById(R.id.tip);
-            tip_date = (Button) findViewById(R.id.tip_date);
-            tip_type = (Button) findViewById(R.id.tip_type);
-
             if (savedInstanceState != null) {
                 cur = savedInstanceState.getInt("cur");
                 timestr = savedInstanceState.getString("timestr");
                 tip.setText(savedInstanceState.getString("tip"));
                 money.setText(savedInstanceState.getString("money"));
             }
+
             Calendar now = Calendar.getInstance();
             timestr=String.valueOf(now.get(Calendar.YEAR))+"-"+ String.valueOf(now.get(Calendar.MONTH) + 1)+"-"+String.valueOf(now.get(Calendar.DAY_OF_MONTH));
             tip_date.setText(timestr);
@@ -82,7 +103,7 @@ public class Add extends AppCompatActivity {
             tip_date.setBackgroundResource(MyColor.get());
             tip_type.setBackgroundResource(MyColor.get());
 
-            mTag = (TagContainerLayout) findViewById(R.id.ttag);
+
             mTag.setTheme(0);
             mTag.setTagBackgroundColor(Color.TRANSPARENT);
             mTag.setOnTagClickListener(new TagView.OnTagClickListener() {
@@ -106,7 +127,6 @@ public class Add extends AppCompatActivity {
                 }
             });
 
-            ok = (Button) findViewById(R.id.ok);
             ok.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -137,7 +157,6 @@ public class Add extends AppCompatActivity {
                 }
             });
 
-            date = (Button) findViewById(R.id.date);
             date.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -167,17 +186,29 @@ public class Add extends AppCompatActivity {
         if (item.getItemId() == android.R.id.home) {
             finish();
         }
+
         return true;
     }
 
     public void onResume(){
         super.onResume();
+        Pool.run(new Runnable() {
+            @Override
+            public void run() {
+                Refresh();
+            }
+        });
+
+    }
+
+
+    public void Refresh(){
         SQLiteDatabase read = mydb.getWritableDatabase();
         Cursor cursor = read.query("tag", null, null, null, null, null, null);
         type.clear();
         cur = 0;
         if (cursor.moveToFirst()) {
-          do {
+            do {
                 int id = cursor.getInt(cursor.getColumnIndex("id"));
                 String tag = cursor.getString(cursor.getColumnIndex("type"));
                 type.put(tag, id);
@@ -186,10 +217,17 @@ public class Add extends AppCompatActivity {
         cursor.close();
         Set<String> myset = type.keySet();
 
-        List<String> taglist=new ArrayList<String>();
+        final List<String> taglist=new ArrayList<String>();
         taglist.addAll(myset);
         taglist.add("自定义");
-        mTag.setTags(taglist);
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mTag.setTags(taglist);
+            }
+        });
+
     }
 
     protected void onSaveInstanceState(Bundle outState){

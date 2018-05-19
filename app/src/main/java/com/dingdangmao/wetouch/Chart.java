@@ -27,31 +27,55 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
 
+import butterknife.BindView;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
-public class Chart extends AppCompatActivity {
-    private Button ok;
-    private Button delete;
-    private EditText year;
-    private EditText month;
-    private EditText day;
+public class Chart extends Base {
+
+
     private db mydb=new db(this,"mydb.db",null,2);
     private HashMap<Integer,String> mytag = new HashMap<Integer,String>();
     private ArrayList<ChartModel> model=new ArrayList<ChartModel>();
-    private RecyclerView rv;
-    private AdapterChart app;
 
-    private CardView lineL;
-    private CardView barL;
-    private CardView pieL;
-    private CardView mainL;
+    @BindView(R.id.main)
+    public RecyclerView rv;
+    public AdapterChart app;
+
+
+    @BindView(R.id.ok)
+    public Button ok;
+
+    @BindView(R.id.delete)
+    public Button delete;
+
+    @BindView(R.id.year)
+    public EditText year;
+
+    @BindView(R.id.month)
+    public EditText month;
+
+    @BindView(R.id.day)
+    public EditText day;
+
+    @BindView(R.id.lineL)
+    public CardView lineL;
+
+    public CardView barL;
+
+    @BindView(R.id.pieL)
+    public CardView pieL;
+
+    @BindView(R.id.mainL)
+    public CardView mainL;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chart);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+    public int getLayoutId() {
+        return R.layout.activity_chart;
+    }
+
+    @Override
+    public void init(Bundle savedInstanceState) {
+
         ActionBar bar = getSupportActionBar();
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
@@ -60,16 +84,8 @@ public class Chart extends AppCompatActivity {
 
         Util.toolbar(this);
 
-        mainL=(CardView)findViewById(R.id.mainL);
-        pieL=(CardView)findViewById(R.id.pieL);
-        //barL=(CardView)findViewById(R.id.barL);
-        lineL=(CardView)findViewById(R.id.lineL);
 
-        year=(EditText) findViewById(R.id.year);
-        month=(EditText) findViewById(R.id.month);
-
-        day=(EditText) findViewById(R.id.day);
-        ok = (Button) findViewById(R.id.ok);
+        
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -100,7 +116,7 @@ public class Chart extends AppCompatActivity {
                 }
             }
         });
-        delete = (Button) findViewById(R.id.delete);
+       // delete = (Button) findViewById(R.id.delete);
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,7 +143,7 @@ public class Chart extends AppCompatActivity {
             }
         });
         app = new AdapterChart(model,mytag);
-        rv=(RecyclerView)findViewById(R.id.main);
+        //rv=(RecyclerView)findViewById(R.id.main);
         rv.setLayoutManager(new StaggeredGridLayoutManager(1,StaggeredGridLayoutManager.VERTICAL));
         rv.setAdapter(app);
 
@@ -151,56 +167,69 @@ public class Chart extends AppCompatActivity {
         mainL.setVisibility(View.VISIBLE);
         hide();
     }
-    public void listMonth(int y,int m){
-        try{
-        model.clear();
 
+    public void listMonth(final int y,final int m){
+
+        Pool.run(new Runnable() {
+            @Override
+            public void run() {
+                final HashMap<Integer,Float> count=monthData(y,m);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        monthUI(count);
+                    }
+                });
+            }
+        });
+    }
+
+    public HashMap<Integer,Float>  monthData(int y,int m){
+        model.clear();
         HashMap<Integer,Float> count=new HashMap<Integer,Float>();
         Cursor c;
         SQLiteDatabase write = mydb.getWritableDatabase();
         c = write.rawQuery("select total,type,month,day from money where year=? and month=? order by day ASC", new String[]{String.valueOf(y), String.valueOf(m)});
         if(c.moveToFirst()){
-             do{
+            do{
                 float total = c.getFloat(0); //获取第一列的值,第一列的索引从0开始
                 int type = c.getInt(1);//获取第三列的值
                 model.add(new ChartModel(total, type, String.valueOf(c.getInt(2)) + "-" + String.valueOf(c.getInt(3))));
-                 if(mytag.containsKey(type)) {
-                     if (!count.containsKey(type))
-                         count.put(type, total);
-                     else
-                         count.put(type, count.get(type) + total);
-                 }
+                if(mytag.containsKey(type)) {
+                    if (!count.containsKey(type))
+                        count.put(type, total);
+                    else
+                        count.put(type, count.get(type) + total);
+                }
 
             }while (c.moveToNext());
         }
-
         c.close();
         write.close();
+        return count;
+    }
+    public void monthUI(HashMap<Integer,Float> count){
         app.notifyDataSetChanged();
         mainL.setVisibility(View.VISIBLE);
         hide();
-            PieChart mPieChart = (PieChart) findViewById(R.id.pie);
-            mPieChart.clearChart();
-            Iterator it = count.keySet().iterator();
-            int index=0;
-            Random rand = new Random();
-            String sb="";
-            String[] color=new String[]{"#3F5D7D","#279B61","#008AB8","#993333","#A3E496","#95CAE4","#CC3333","#FFFF7A","#CC6699"};
-            while (it.hasNext()) {
-                int key = (int) it.next();
-                //sb=sb+mytag.get(key)+String.valueOf(count.get(key));
-                if(index>=color.length) {
-                    index = rand.nextInt(color.length-1)+1;
-                }
-                mPieChart.addPieSlice(new PieModel(mytag.get(key),count.get(key), Color.parseColor(color[index])));
-                index++;
+        PieChart mPieChart = (PieChart) findViewById(R.id.pie);
+        mPieChart.clearChart();
+        Iterator it = count.keySet().iterator();
+        int index=0;
+        Random rand = new Random();
+        String sb="";
+        String[] color=new String[]{"#3F5D7D","#279B61","#008AB8","#993333","#A3E496","#95CAE4","#CC3333","#FFFF7A","#CC6699"};
+        while (it.hasNext()) {
+            int key = (int) it.next();
+            //sb=sb+mytag.get(key)+String.valueOf(count.get(key));
+            if(index>=color.length) {
+                index = rand.nextInt(color.length-1)+1;
             }
-            mPieChart.startAnimation();
-            pieL.setVisibility(View.VISIBLE);
-           // ((TextView)findViewById(R.id.tip)).setText(sb);
-        }catch(Exception e){
-            Toast.makeText(Chart.this, e.toString(), Toast.LENGTH_SHORT).show();
+            mPieChart.addPieSlice(new PieModel(mytag.get(key),count.get(key), Color.parseColor(color[index])));
+            index++;
         }
+        mPieChart.startAnimation();
+        pieL.setVisibility(View.VISIBLE);
     }
     public void listYear(int y){
 
@@ -244,26 +273,36 @@ public class Chart extends AppCompatActivity {
             mCubicValueLineChart.addSeries(series);
             mCubicValueLineChart.startAnimation();
             lineL.setVisibility(View.VISIBLE);
+
         }catch(Exception  e){
             Toast.makeText(Chart.this, e.toString(), Toast.LENGTH_SHORT).show();
         }
-        //pieL.setVisibility(View.VISIBLE);
     }
+
     public void onResume(){
 
         super.onResume();
+
+        Pool.run(new Runnable() {
+            @Override
+            public void run() {
+                Refresh();
+            }
+        });
+
+    }
+
+    public void Refresh(){
         SQLiteDatabase read=mydb.getWritableDatabase();
         Cursor cursor=read.query("tag",null,null,null,null,null,null);
         if(cursor.moveToFirst()){
-          do{
+            do{
                 int id = cursor.getInt(cursor.getColumnIndex("id"));
                 String tag = cursor.getString(cursor.getColumnIndex("type"));
                 mytag.put(id,tag);
             }  while(cursor.moveToNext());
         }
         cursor.close();
-
-
     }
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -274,12 +313,11 @@ public class Chart extends AppCompatActivity {
         return true;
     }
     private void hide(){
+
         if(lineL.getVisibility()==View.VISIBLE)
             lineL.setVisibility(View.GONE);
         if(pieL.getVisibility()==View.VISIBLE)
             pieL.setVisibility(View.GONE);
-       // if(barL.getVisibility()==View.VISIBLE)
-        //    barL.setVisibility(View.GONE);
     }
     public void delete(){
         String s1 = year.getText().toString();
