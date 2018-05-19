@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+    <group android:checkableBehavior="single"
+        android:id="@+id/g1">
+        <item android:title="统计分析"
+            android:id="@+id/count"
+            android:icon="@drawable/chart"
+             />
+        <item android:title="类别管理"
+            android:id="@+id/type"
+            android:icon="@drawable/star"
+            />
+        <item android:title="数据导出"
+            android:id="@+id/out"
+            android:icon="@drawable/arrow"
+            />
+        <item android:title="关于我们"
+            android:id="@+id/about"
+            android:icon="@drawable/about"
+             />
+    </group>
+
+</menu>
