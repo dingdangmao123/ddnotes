@@ -6,12 +6,13 @@
     android:layout_height="match_parent"
     tools:context="com.dingdangmao.wetouch.start">
     <ImageView
+        android:id="@+id/iv"
         android:scaleType="centerCrop"
-        android:background="@drawable/timg"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
     <LinearLayout
-        android:background="#8803A9F4"
+        android:id="@+id/f"
+
         android:orientation="vertical"
         android:padding="30dp"
         android:layout_width="match_parent"
@@ -19,7 +20,7 @@
         <TextView
             android:textColor="#FFFFFF"
             android:textSize="30sp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="60dp"
             android:gravity="center"
             android:text="叮当记账"
             android:layout_gravity="bottom"

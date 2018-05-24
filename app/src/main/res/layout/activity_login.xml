@@ -5,7 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.dingdangmao.wetouch.login">
-
+    <ImageView
+        android:id="@+id/iv"
+        android:scaleType="centerCrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 <LinearLayout
     android:background="#8803A9F4"
     android:orientation="vertical"

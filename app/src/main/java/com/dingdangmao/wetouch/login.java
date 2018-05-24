@@ -1,6 +1,7 @@
 package com.dingdangmao.wetouch;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.andrognito.pinlockview.IndicatorDots;
@@ -15,11 +17,15 @@ import com.andrognito.pinlockview.PinLockListener;
 import com.andrognito.pinlockview.PinLockView;
 
 import butterknife.BindView;
+import jp.wasabeef.blurry.Blurry;
 
 public class login extends Base {
 
 
     String psd="";
+
+    @BindView(R.id.iv)
+    ImageView iv;
 
     @BindView(R.id.pin)
     public PinLockView pin;
@@ -45,6 +51,9 @@ public class login extends Base {
 
         super.init(savedInstanceState);
 
+        Blurry.with(this)
+                .radius(20)
+                .from(BitmapFactory.decodeResource(getResources(), R.drawable.bg)).into(iv);
 
         pin.setPinLockListener(pinl);
         pin.attachIndicatorDots(dot);

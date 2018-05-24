@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -14,14 +13,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ImageView;
 
 import com.jaeger.library.StatusBarUtil;
 
@@ -44,6 +42,8 @@ public class Main extends Base {
     public RecyclerView rv;
 
 
+
+
     private Adapter app;
     private db mydb = new db(this, "mydb.db", null, 2);
     private ArrayList<Model> mlist = new ArrayList<Model>();
@@ -64,6 +64,7 @@ public class Main extends Base {
             bar.setDisplayHomeAsUpEnabled(true);
             bar.setDisplayShowTitleEnabled(false);
         }
+
 
         nv.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override

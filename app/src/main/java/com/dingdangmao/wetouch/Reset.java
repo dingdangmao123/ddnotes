@@ -3,12 +3,14 @@
 package com.dingdangmao.wetouch;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +19,7 @@ import com.andrognito.pinlockview.PinLockListener;
 import com.andrognito.pinlockview.PinLockView;
 
 import butterknife.BindView;
+import jp.wasabeef.blurry.Blurry;
 
 public class Reset extends Base {
 
@@ -25,6 +28,10 @@ public class Reset extends Base {
     String tmp="";
 
     int cur=1;
+
+
+    @BindView(R.id.iv)
+    ImageView iv;
 
     @BindView(R.id.tip)
     public TextView tip;
@@ -54,14 +61,13 @@ public class Reset extends Base {
 
         super.init(savedInstanceState);
 
+        Blurry.with(this)
+                .radius(20)
+                .from(BitmapFactory.decodeResource(getResources(), R.drawable.bg)).into(iv);
+
         pin.setPinLockListener(pinl);
-
         pin.attachIndicatorDots(dot);
-
         psd=Psd.get(this);
-
-
-
     }
 
     @Override
