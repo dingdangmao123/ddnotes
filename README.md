@@ -14,6 +14,6 @@
 
 ## 运行效果
 ![](https://github.com/dingdangmao123/WeTouch/blob/master/demo/1.jpg)
-![](https://github.com/dingdangmao123/WeTouch/blob/master/demo/2.jpg)
-![](https://github.com/dingdangmao123/WeTouch/blob/master/demo/3.jpg)
+![](https://github.com/dingdangmao123/WeTouch/blob/master/demo/2.png)
+![](https://github.com/dingdangmao123/WeTouch/blob/master/demo/3.png)
 
