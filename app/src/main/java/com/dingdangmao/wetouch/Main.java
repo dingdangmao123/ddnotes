@@ -81,9 +81,13 @@ public class Main extends Base {
                         Intent intent3 = new Intent(Main.this, Type.class);
                         startActivity(intent3);
                         break;
-                    case R.id.about:
-                        Intent intent4 = new Intent(Main.this, About.class);
+                    case R.id.psd:
+                        Intent intent4 = new Intent(Main.this, Reset.class);
                         startActivity(intent4);
+                        break;
+                    case R.id.about:
+                        Intent intent5 = new Intent(Main.this, About.class);
+                        startActivity(intent5);
                         break;
                     default:
                         break;

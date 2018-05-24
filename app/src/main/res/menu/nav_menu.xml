@@ -16,6 +16,10 @@
             android:id="@+id/out"
             android:icon="@drawable/arrow"
             />
+        <item android:title="密码设置"
+            android:id="@+id/psd"
+            android:icon="@drawable/lock"
+            />
         <item android:title="关于我们"
             android:id="@+id/about"
             android:icon="@drawable/about"

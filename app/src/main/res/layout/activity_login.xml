@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.dingdangmao.wetouch.login">
+
+<LinearLayout
+    android:background="#8803A9F4"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<TextView
+    android:layout_marginTop="80dp"
+    android:textColor="#FFFFFF"
+    android:text="请输入密码"
+    android:layout_gravity="center_horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
+    <com.andrognito.pinlockview.IndicatorDots
+        android:id="@+id/dot"
+        android:layout_marginTop="30dp"
+        app:dotDiameter="12dp"
+        app:dotSpacing="16dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <com.andrognito.pinlockview.PinLockView
+       android:layout_gravity="center_horizontal"
+        android:id="@+id/pin"
+        android:layout_marginTop="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+</LinearLayout>
+</android.support.constraint.ConstraintLayout>
