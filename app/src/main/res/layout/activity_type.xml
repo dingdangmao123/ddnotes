@@ -27,10 +27,15 @@
                 />
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
+    <ScrollView
+        android:scrollbars="none"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
         android:layout_marginTop="70dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
@@ -66,7 +71,7 @@
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
             android:background="@drawable/select2"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="15dp"
             android:ems="10"
             android:id="@+id/newtag" />
         <Button
@@ -79,5 +84,5 @@
             android:id="@+id/ok" />
     </LinearLayout>
 
-</android.support.v7.widget.CardView>
+    </android.support.v7.widget.CardView></ScrollView>
 </android.support.design.widget.CoordinatorLayout>
