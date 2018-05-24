@@ -47,8 +47,6 @@ public class login extends Base {
 
 
         pin.setPinLockListener(pinl);
-       // pin.setTextSize(60);
-       // pin.setButtonBackgroundDrawable(getResources().getDrawable(R.drawable.bg1));
         pin.attachIndicatorDots(dot);
 
         psd=Psd.get(this);

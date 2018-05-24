@@ -15,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
-        <activity android:name=".Main"></activity>
+        <activity android:name=".Main" />
         <activity android:name=".Add" />
         <activity android:name=".Out" />
         <activity android:name=".About" />
@@ -41,13 +41,17 @@
         </provider>
 
         <activity android:name=".login">
+
+        </activity>
+        <activity android:name=".Reset" />
+        <activity android:name=".start">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
-        <activity android:name=".Reset"></activity>
     </application>
 
 </manifest>

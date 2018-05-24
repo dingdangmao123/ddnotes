@@ -36,7 +36,7 @@
     app:keypadVerticalSpacing="15dp"
     app:keypadHorizontalSpacing="15dp"
     app:keypadButtonBackgroundDrawable="@drawable/bg1"
-    app:keypadDeleteButtonSize="50dp"
+    app:keypadDeleteButtonSize="45dp"
     app:keypadShowDeleteButton="true"
     app:keypadDeleteButtonPressedColor="#C8C8C8"
     android:layout_marginTop="40dp"
