@@ -13,4 +13,4 @@
 
 
 ## 运行效果
-![](https://github.com/dingdangmao123/WeTouch/blob/master/demo/550.png) ![](https://github.com/dingdangmao123/WeTouch/blob/master/demo/551.png) ![](https://github.com/dingdangmao123/WeTouch/blob/master/demo/552.png) ![](https://github.com/dingdangmao123/WeTouch/blob/master/demo/553.png) ![](https://github.com/dingdangmao123/WeTouch/blob/master/demo/554.png) ![](https://github.com/dingdangmao123/WeTouch/blob/master/demo/555.png)
+![](https://github.com/dingdangmao123/WeTouch/blob/master/demo/550.jpg) ![](https://github.com/dingdangmao123/WeTouch/blob/master/demo/551.png) ![](https://github.com/dingdangmao123/WeTouch/blob/master/demo/552.png) ![](https://github.com/dingdangmao123/WeTouch/blob/master/demo/553.png) ![](https://github.com/dingdangmao123/WeTouch/blob/master/demo/554.png) ![](https://github.com/dingdangmao123/WeTouch/blob/master/demo/555.png)
