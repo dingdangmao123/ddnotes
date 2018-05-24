@@ -24,6 +24,7 @@
             android:layout_marginTop="30dp"
             app:dotDiameter="12dp"
             app:dotSpacing="16dp"
+            app:indicatorType="fillWithAnimation"
             android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -31,6 +32,14 @@
         <com.andrognito.pinlockview.PinLockView
             android:layout_gravity="center_horizontal"
             android:id="@+id/pin"
+            app:keypadTextSize="16dp"
+            app:keypadButtonSize="50dp"
+            app:keypadVerticalSpacing="15dp"
+            app:keypadHorizontalSpacing="15dp"
+            app:keypadButtonBackgroundDrawable="@drawable/bg1"
+            app:keypadDeleteButtonSize="50dp"
+            app:keypadShowDeleteButton="true"
+            app:keypadDeleteButtonPressedColor="#C8C8C8"
             android:layout_marginTop="40dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />

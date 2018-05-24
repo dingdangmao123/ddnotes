@@ -1,6 +1,7 @@
 package com.dingdangmao.wetouch;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -44,8 +45,10 @@ public class login extends Base {
 
         super.init(savedInstanceState);
 
-        pin.setPinLockListener(pinl);
 
+        pin.setPinLockListener(pinl);
+       // pin.setTextSize(60);
+       // pin.setButtonBackgroundDrawable(getResources().getDrawable(R.drawable.bg1));
         pin.attachIndicatorDots(dot);
 
         psd=Psd.get(this);
