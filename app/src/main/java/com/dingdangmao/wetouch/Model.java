@@ -5,20 +5,22 @@ package com.dingdangmao.wetouch;
  */
 
 public class Model {
+    private int id;
     private int time;
     private float money;
     private int type;
     private String tip;
     private static int unix=(int)(System.currentTimeMillis()/1000);
-    public Model(int time,float money,int type,String tip){
+    public Model(int time,float money,int type,String tip,int id){
         this.time=time;
         this.money=money;
         this.type=type;
         this.tip=tip;
+        this.id=id;
     }
     public String getTime(){
 
-            int tmp=(unix-time)/86400;
+        int tmp=(unix-time)/86400;
         if(tmp<0)
             return "未来";
             else if(tmp==0)
@@ -31,4 +33,8 @@ public class Model {
     public float getMoney(){ return this.money;}
     public int getType(){ return this.type;}
     public String getTip(){ return this.tip;}
+
+    public int getId() {
+        return id;
+    }
 }

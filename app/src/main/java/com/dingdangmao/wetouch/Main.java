@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -16,6 +17,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
+import android.util.LruCache;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -106,9 +108,10 @@ public class Main extends Base {
         filter.addAction("com.dingdangmao.wetouch.REFRESH");
         registerReceiver(receiver, filter);
 
-        app = new Adapter(mlist, mytag);
+        app = new Adapter(this,mlist, mytag);
         rv.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
         rv.setAdapter(app);
+        rv.setNestedScrollingEnabled(false);
 
     }
 
@@ -171,7 +174,7 @@ public class Main extends Base {
 
         SQLiteDatabase write = mydb.getWritableDatabase();
         mlist.clear();
-        Cursor cursor = write.rawQuery("select * from money order by id DESC  limit 0,20", null);
+        Cursor cursor = write.rawQuery("select * from money order by id DESC  limit 0,30", null);
 
         if (cursor.moveToFirst()) {
             do {
@@ -183,8 +186,8 @@ public class Main extends Base {
                 float total = cursor.getFloat(cursor.getColumnIndex("total"));
                 int type = cursor.getInt(cursor.getColumnIndex("type"));
                 String tip = cursor.getString(cursor.getColumnIndex("tip"));
-
-                mlist.add(new Model(dateTounix.To(year, month, day), total, type, tip));
+                Log.i("model",id+" ");
+                mlist.add(new Model(dateTounix.To(year, month, day), total, type, tip,id));
 
             } while (cursor.moveToNext());
 
