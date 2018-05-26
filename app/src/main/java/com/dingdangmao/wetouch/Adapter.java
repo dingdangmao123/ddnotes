@@ -60,8 +60,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.myViewHolder> {
 
                 final int pos = v.getAdapterPosition();
                 new SweetAlertDialog(p.getContext(), SweetAlertDialog.WARNING_TYPE)
-                        .setTitleText("确定?")
-                        .setContentText("删除后不可恢复！")
+                        .setTitleText("删除后不可恢复！")
                         .setCancelText("取消")
                         .setConfirmText("删除")
                         .showCancelButton(true)
@@ -95,9 +94,9 @@ public class Adapter extends RecyclerView.Adapter<Adapter.myViewHolder> {
         Model p = mList.get(position);
         try {
 
-            holder.f.setBackgroundColor(MyColor.data2[p.getType() % MyColor.data.length]);
+            holder.f.setBackgroundColor(MyColor.data2[p.getType() % MyColor.data2.length]);
             holder.total.setText("¥ " + String.valueOf(p.getMoney()));
-            holder.type.setTextColor(MyColor.data2[p.getType() % MyColor.data.length]);
+            holder.type.setTextColor(MyColor.data2[p.getType() % MyColor.data2.length]);
             holder.tip.setText(p.getTip());
             String tmp = tag.get(p.getType());
             if (tmp != null)
@@ -140,7 +139,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.myViewHolder> {
             public void run() {
                 mList.remove(pos);
                 notifyDataSetChanged();
-                D.show(context, "删除成功！");
+                D.tip(context, "删除成功！");
 
             }
         });

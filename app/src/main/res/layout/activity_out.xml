@@ -1,84 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dl"
-    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context="com.dingdangmao.wetouch.Add">
+
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
-            android:minHeight="?attr/actionBarSize"
-            android:id="@+id/toolbar" >
+            android:minHeight="?attr/actionBarSize">
+
             <TextView
+                style="@style/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="导出数据"
-                android:textStyle="bold"
-                style="@style/title"
-                />
+                android:textStyle="bold" />
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
+
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        android:layout_marginTop="80dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginBottom="20dp"
-        app:cardElevation="3dp"
-        >
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+        android:layout_marginTop="80dp"
+        app:cardElevation="3dp">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:padding="20dp"
+            android:orientation="vertical">
 
-            >
-            <Button
-                android:text="生成CSV文件"
-                android:layout_marginTop="15dp"
-                android:layout_marginRight="30dp"
-                android:layout_width="wrap_content"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp"
-                android:layout_height="35dp"
-                android:textColor="@color/colorTagText"
-                android:background="@drawable/select1"
-                android:id="@+id/load" />
-            <Button
-                android:text="导出"
-                android:layout_marginTop="15dp"
-                android:layout_width="70dp"
-                android:layout_height="35dp"
-                android:textColor="@color/colorTagText"
-                android:background="@drawable/select1"
-                android:id="@+id/ok" />
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:padding="20dp"
-            android:orientation="horizontal"
-            android:layout_height="wrap_content">
-            <TextView
-                android:id="@+id/csv"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="20dp"
+
+                >
+
+                <Button
+                    android:id="@+id/load"
+                    android:layout_width="wrap_content"
+                    android:layout_height="35dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/select1"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp"
+                    android:text="生成CSV文件"
+                    android:textColor="@color/colorTagText" />
+
+                <Button
+                    android:id="@+id/ok"
+                    android:layout_width="70dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="15dp"
+                    android:background="@drawable/select1"
+                    android:text="导出"
+                    android:textColor="@color/colorTagText" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="20dp">
+
+                <TextView
+                    android:id="@+id/csv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>
 </android.support.design.widget.CoordinatorLayout>

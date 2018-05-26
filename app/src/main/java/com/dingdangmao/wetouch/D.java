@@ -11,6 +11,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 public class D {
     public static void show(Context context,String content){
         new SweetAlertDialog(context)
+                .setTitleText("")
                 .setContentText(content)
                 .show();
     }

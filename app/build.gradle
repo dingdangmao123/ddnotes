@@ -44,7 +44,7 @@ dependencies {
     compile 'co.lujun:androidtagview:1.1.3'
     compile 'com.yarolegovich:sliding-root-nav:1.0.2'
     compile 'com.jaeger.statusbarutil:library:1.4.0'
-    compile 'org.sufficientlysecure:html-textview:3.3'
+
 
     compile 'com.jakewharton:butterknife:8.4.0'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'

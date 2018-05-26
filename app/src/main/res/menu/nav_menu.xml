@@ -6,23 +6,27 @@
         android:id="@+id/g1">
         <item android:title="统计分析"
             android:id="@+id/count"
-            android:icon="@drawable/chart"
+
+
              />
         <item android:title="类别管理"
             android:id="@+id/type"
-            android:icon="@drawable/star"
+
             />
         <item android:title="数据导出"
             android:id="@+id/out"
-            android:icon="@drawable/arrow"
+
             />
+    </group>
+    <group android:checkableBehavior="single"
+        android:id="@+id/g2">
         <item android:title="密码设置"
             android:id="@+id/psd"
-            android:icon="@drawable/lock"
+
             />
         <item android:title="关于我们"
             android:id="@+id/about"
-            android:icon="@drawable/about"
+
              />
     </group>
 

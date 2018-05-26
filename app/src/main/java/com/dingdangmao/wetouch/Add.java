@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -110,8 +111,10 @@ public class Add extends Base {
         tip_type.setBackgroundResource(MyColor.get());
 
 
+        final Typeface typeface = Typeface.createFromAsset(getAssets(), "fz.TTF");
         mTag.setTheme(0);
         mTag.setTagBackgroundColor(Color.TRANSPARENT);
+        mTag.setTagTypeface(typeface);
         mTag.setOnTagClickListener(new TagView.OnTagClickListener() {
             @Override
             public void onTagClick(int position, String tag) {
@@ -224,7 +227,7 @@ public class Add extends Base {
 
     public void Refresh() {
         SQLiteDatabase read = mydb.getWritableDatabase();
-        Cursor cursor = read.query("tag", null, null, null, null, null, null);
+        Cursor cursor = read.query("tag", null, null, null, null, null, "id asc");
         type.clear();
         cur = 0;
         if (cursor.moveToFirst()) {

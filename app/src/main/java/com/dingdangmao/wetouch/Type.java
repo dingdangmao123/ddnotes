@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -121,8 +123,13 @@ public class Type extends Base {
             }
         });
 
+        final Typeface typeface = Typeface.createFromAsset(getAssets(), "fz.TTF");
+
         mTag.setTheme(0);
         mTag.setTagBackgroundColor(Color.TRANSPARENT);
+        mTag.setTagTypeface(typeface);
+
+
         mTag.setOnTagClickListener(new TagView.OnTagClickListener() {
 
             @Override
@@ -180,21 +187,29 @@ public class Type extends Base {
     }
 
     private void Refresh() {
+        mytag.clear();
         SQLiteDatabase read = mydb.getWritableDatabase();
-        Cursor cursor = read.query("tag", null, null, null, null, null, null);
+        Cursor cursor = read.query("tag", null, null, null, null, null, "id asc");
+
         if (cursor.moveToFirst()) {
             do {
 
                 String tag = cursor.getString(cursor.getColumnIndex("type"));
+                //T.show2(this,tag);
+                //Log.i("type",tag);
                 mytag.add(tag);
 
             } while (cursor.moveToNext());
         }
         cursor.close();
-        String[] tags = mytag.toArray(new String[mytag.size()]);
+
         List<String> taglist = new ArrayList<String>();
         taglist.addAll(mytag);
+        for(String s:taglist)
+            Log.i("type-tag",s);
+
         mTag.setTags(taglist);
+
 
     }
 

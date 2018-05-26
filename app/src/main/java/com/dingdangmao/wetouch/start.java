@@ -1,15 +1,11 @@
 package com.dingdangmao.wetouch;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -30,7 +26,7 @@ public class start extends Base {
         super.init(savedInstanceState);
 
         Blurry.with(this)
-                .radius(25)
+                .radius(20)
                 .from(BitmapFactory.decodeResource(getResources(), R.drawable.bg)).into(iv);
 
         ins.postDelayed(new Runnable() {
@@ -42,7 +38,7 @@ public class start extends Base {
                 finish();
 
             }
-        }, 3000);
+        }, 1000);
     }
 
     @Override

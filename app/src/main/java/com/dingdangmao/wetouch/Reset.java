@@ -68,6 +68,11 @@ public class Reset extends Base {
         pin.setPinLockListener(pinl);
         pin.attachIndicatorDots(dot);
         psd=Psd.get(this);
+
+        if(psd=="") {
+            tip.setText("输入新密码");
+            cur=2;
+        }
     }
 
     @Override

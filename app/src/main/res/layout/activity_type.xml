@@ -1,38 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dl"
-    android:fitsSystemWindows="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     tools:context="com.dingdangmao.wetouch.Add">
+
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
-            android:minHeight="?attr/actionBarSize"
-            android:id="@+id/toolbar" >
+            android:minHeight="?attr/actionBarSize">
+
             <TextView
+                style="@style/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="类别管理"
-                android:textStyle="bold"
-                style="@style/title"
-                />
+                android:textStyle="bold" />
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
-    <ScrollView
-        android:scrollbars="none"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="30dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -83,6 +79,6 @@
             android:background="@drawable/select1"
             android:id="@+id/ok" />
     </LinearLayout>
+    </android.support.v7.widget.CardView>
 
-    </android.support.v7.widget.CardView></ScrollView>
 </android.support.design.widget.CoordinatorLayout>

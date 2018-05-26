@@ -48,13 +48,11 @@
                 android:orientation="vertical"
                 >
 
-                <org.sufficientlysecure.htmltextview.HtmlTextView
-                    android:id="@+id/html_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:textColor="#FF666666"
-                    android:textAppearance="@android:style/TextAppearance.Holo.Medium" />
-
+<TextView
+    android:id="@+id/about"
+    android:layout_margin="30dp"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"/>
             </LinearLayout>
         </android.support.v7.widget.CardView>
 

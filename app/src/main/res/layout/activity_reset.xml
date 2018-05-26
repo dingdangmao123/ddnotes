@@ -11,7 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
     <LinearLayout
-        android:background="#8803A9F4"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -19,6 +18,7 @@
             android:layout_marginTop="80dp"
             android:textColor="#FFFFFF"
             android:id="@+id/tip"
+            android:textSize="18sp"
             android:text="请输入原始密码"
             android:layout_gravity="center_horizontal"
             android:layout_width="wrap_content"
@@ -39,8 +39,8 @@
             app:keypadTextSize="16dp"
             app:keypadButtonSize="50dp"
             app:keypadVerticalSpacing="15dp"
-            app:keypadHorizontalSpacing="15dp"
-            app:keypadButtonBackgroundDrawable="@drawable/bg1"
+            app:keypadHorizontalSpacing="20dp"
+            app:keypadButtonBackgroundDrawable="@drawable/bg2"
             app:keypadDeleteButtonSize="50dp"
             app:keypadShowDeleteButton="true"
             app:keypadDeleteButtonPressedColor="#C8C8C8"
