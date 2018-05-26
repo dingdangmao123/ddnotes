@@ -70,7 +70,7 @@ public class Add extends Base {
     private HashMap<String, Integer> type = new HashMap<String, Integer>();
     private int cur = 0;
     private String timestr;
-    private TagGroup mTagGroup;
+
     private WheelPicker wheel;
 
 

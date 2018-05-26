@@ -26,34 +26,46 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.util.HashMap;
 
-public class Out extends AppCompatActivity {
-    private Button ok;
-    private Button load;
+import butterknife.BindView;
+
+public class Out extends Base {
+
+    @BindView(R.id.csv)
+    public TextView csv;
+
+    @BindView(R.id.ok)
+    public Button ok;
+
+    @BindView(R.id.load)
+    public Button load;
+
     private boolean flag=false;
     private db mydb=new db(this,"mydb.db",null,2);
 
     private HashMap<Integer,String> mytag=new HashMap<Integer,String>();
     private final String fname="data.csv";
-    private TextView csv;
+
+
     private Handler hld=new Handler(){
         public void handleMessage(Message msg){
             if(msg.what==1){
                 flag=false;
                 TextView csv=(TextView)findViewById(R.id.csv);
                 csv.setText(fname);
-                Toast.makeText(Out.this,String.valueOf(msg.obj),Toast.LENGTH_SHORT).show();
+                T.show2(Out.this,String.valueOf(msg.obj));
             }
         }
     };
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_out);
+    public int getLayoutId() {
+        return R.layout.activity_out;
+    }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+    @Override
+    public void init(Bundle savedInstanceState) {
+
         ActionBar bar = getSupportActionBar();
-
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
             bar.setDisplayShowTitleEnabled(false);
@@ -61,16 +73,14 @@ public class Out extends AppCompatActivity {
 
         Util.toolbar(this);
 
-        csv=(TextView)findViewById(R.id.csv);
-        load = (Button) findViewById(R.id.load);
         load.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(flag){
-                    Toast.makeText(Out.this, "正在生成CSV文件", Toast.LENGTH_SHORT).show();
+                    T.show2(Out.this, "正在生成CSV文件");
                 }else {
                     flag=true;
-                    new Thread(new Runnable() {
+                    Pool.run(new Runnable() {
                         public void run() {
                             SQLiteDatabase write = mydb.getWritableDatabase();
                             File file = new File(getExternalCacheDir(),fname);
@@ -82,7 +92,7 @@ public class Out extends AppCompatActivity {
                                     file.createNewFile();
                                 }
                                 fos = new FileOutputStream(file);
-                                bw = new BufferedWriter(new OutputStreamWriter(fos));
+                                bw = new BufferedWriter(new OutputStreamWriter(fos,"utf-8"));
                                 Cursor c = write.rawQuery("select total,type,year,month,day,tip from money order by id DESC", null);
                                 if (c.moveToFirst()) {
                                 do{
@@ -110,7 +120,7 @@ public class Out extends AppCompatActivity {
                             hld.sendMessage(msg);
 
                         }
-                    }).start();
+                    });
 
                 }
 
@@ -118,7 +128,7 @@ public class Out extends AppCompatActivity {
             }
 
         });
-        ok = (Button) findViewById(R.id.ok);
+
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v){

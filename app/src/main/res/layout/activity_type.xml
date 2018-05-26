@@ -45,6 +45,11 @@
         android:padding="20dp"
 
         >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
         <co.lujun.androidtagview.TagContainerLayout
             android:id="@+id/ttag"
             android:layout_width="match_parent"
@@ -53,15 +58,10 @@
             android:padding="10dp"
             app:container_enable_drag="false"
             app:horizontal_interval="10dp"
-            app:vertical_interval="10dp"
             app:tag_clickable="true"
-            app:tag_text_size="16sp"
-            app:tag_theme="pure_teal" />
-
-        <me.gujun.android.taggroup.TagGroup
-            android:id="@+id/tag"
-            style="@style/TagGroup.Large"
-            />
+            app:tag_theme="pure_teal"
+            app:vertical_interval="10dp" />
+        </LinearLayout>
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

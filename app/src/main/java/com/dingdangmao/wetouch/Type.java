@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -32,15 +33,13 @@ public class Type extends Base {
 
     private db mydb = new db(this, "mydb.db", null, 2);
     private HashSet<String> mytag = new HashSet<String>();
+    Typeface typeface = null;
 
     @BindView(R.id.ok)
     public Button ok;
 
     @BindView(R.id.newtag)
     public EditText ed;
-
-    @BindView(R.id.tag)
-    public TagGroup mTagGroup;
 
     @BindView(R.id.ttag)
     public TagContainerLayout mTag;
@@ -67,15 +66,7 @@ public class Type extends Base {
 
         Util.toolbar(this);
         flag=getIntent().getBooleanExtra("flag",false);
-
-        mTagGroup.setOnTagClickListener(new TagGroup.OnTagClickListener() {
-            @Override
-            public void onTagClick(String tag) {
-
-                Toast.makeText(getApplicationContext(), tag, Toast.LENGTH_SHORT).show();
-
-            }
-        });
+        typeface=Typeface.createFromAsset(getAssets(), "fz.TTF");
 
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +100,9 @@ public class Type extends Base {
                                     mTag.addTag(t);
                                     mytag.add(t);
                                     ed.setText("");
+                                    TagView tg=(TagView)mTag.getChildAt(mTag.getChildCount()-1);
+                                    tg.setTypeface(typeface);
+
                                 }
                             });
                         }
@@ -123,13 +117,9 @@ public class Type extends Base {
             }
         });
 
-        final Typeface typeface = Typeface.createFromAsset(getAssets(), "fz.TTF");
-
         mTag.setTheme(0);
         mTag.setTagBackgroundColor(Color.TRANSPARENT);
-        mTag.setTagTypeface(typeface);
-
-
+        //mTag.setTagTypeface(typeface);貌似有bug,只能手动设置
         mTag.setOnTagClickListener(new TagView.OnTagClickListener() {
 
             @Override
@@ -176,14 +166,12 @@ public class Type extends Base {
 
     public void onResume() {
         super.onResume();
-
         Pool.run(new Runnable() {
             @Override
             public void run() {
                 Refresh();
             }
         });
-
     }
 
     private void Refresh() {
@@ -195,8 +183,6 @@ public class Type extends Base {
             do {
 
                 String tag = cursor.getString(cursor.getColumnIndex("type"));
-                //T.show2(this,tag);
-                //Log.i("type",tag);
                 mytag.add(tag);
 
             } while (cursor.moveToNext());
@@ -205,12 +191,19 @@ public class Type extends Base {
 
         List<String> taglist = new ArrayList<String>();
         taglist.addAll(mytag);
-        for(String s:taglist)
-            Log.i("type-tag",s);
-
         mTag.setTags(taglist);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
 
-
+                for(int i=0;i<mTag.getChildCount();i++)
+                {
+                    TagView tv=(TagView)mTag.getChildAt(i);
+                    tv.setTypeface(typeface);
+                    Log.i("typeface",i+"");
+                }
+            }
+        });
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -238,8 +231,6 @@ public class Type extends Base {
                 mytag.remove(tag);
             }
         });
-
         return true;
-
     }
 }
