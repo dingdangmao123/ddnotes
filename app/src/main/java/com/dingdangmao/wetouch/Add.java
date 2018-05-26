@@ -154,9 +154,18 @@ public class Add extends Base {
                 } else if (cur == 0) {
                     D.tip(Add.this, "你还未选择类别");
                 } else {
-                    String[] tmp = timestr.split("-");
 
-                    write.execSQL("insert into money(year,month,day,total,tip,type)values(?,?,?,?,?,?)", new String[]{tmp[0], tmp[1], tmp[2], mstr,
+                    String[] tmp = timestr.split("-");
+                    SimpleDateFormat simpleDateFormat =new SimpleDateFormat("yyyy-MM-dd");
+                    Date date=null;
+                    try {
+                         date = simpleDateFormat.parse(tmp[0] + "-" + tmp[1] + "-" + tmp[2]);
+                    }catch(Exception e){
+
+                    }
+                    int r=(int)(date.getTime()/1000);
+                    Log.i("tag",r+"");
+                    write.execSQL("insert into money(year,month,day,unix,total,tip,type)values(?,?,?,?,?,?,?)", new String[]{tmp[0], tmp[1], tmp[2], String.valueOf(r),mstr,
                             tstr, String.valueOf(cur)}
                     );
 

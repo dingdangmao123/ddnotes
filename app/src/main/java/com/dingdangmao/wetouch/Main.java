@@ -184,6 +184,7 @@ public class Main extends Base {
                 int month = cursor.getInt(cursor.getColumnIndex("month"));
                 int day = cursor.getInt(cursor.getColumnIndex("day"));
                 float total = cursor.getFloat(cursor.getColumnIndex("total"));
+                //int unix  = cursor.getInt(cursor.getColumnIndex("total"));
                 int type = cursor.getInt(cursor.getColumnIndex("type"));
                 String tip = cursor.getString(cursor.getColumnIndex("tip"));
                 Log.i("model",id+" ");

@@ -12,7 +12,7 @@ import android.widget.Toast;
 public class db extends SQLiteOpenHelper {
     public static final String CTRATE_MONEY="create table money("
             +"id integer primary key autoincrement,"
-            +"year integer,month integer,day integer,total integer,tip text, type integer)";
+            +"year integer,month integer,day integer,unix integer,total integer,tip text, type integer)";
     public static final String CTRATE_TYPE="create table tag("
             +"id integer primary key autoincrement,"
             +"type text)";
