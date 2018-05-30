@@ -18,6 +18,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dingdangmao.wetouch.Event.Tag;
+
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -109,8 +113,10 @@ public class Type extends Base {
                     });
 
                     if(flag) {
-                        Intent i = new Intent("com.dingdangmao.wetouch.TAG");
-                        sendBroadcast(i);
+
+                        //Intent i = new Intent("com.dingdangmao.wetouch.TAG");
+                        //sendBroadcast(i);
+                        EventBus.getDefault().post(new Tag());
                     }
                 }
 

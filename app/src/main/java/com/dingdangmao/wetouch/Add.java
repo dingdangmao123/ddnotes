@@ -1,19 +1,13 @@
 package com.dingdangmao.wetouch;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,10 +16,10 @@ import android.widget.TextView;
 
 import com.aigestudio.wheelpicker.WheelPicker;
 import com.bigkoo.pickerview.TimePickerView;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.dingdangmao.wetouch.Event.Tag;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -38,7 +32,6 @@ import java.util.Set;
 import butterknife.BindView;
 import co.lujun.androidtagview.TagContainerLayout;
 import co.lujun.androidtagview.TagView;
-import me.gujun.android.taggroup.TagGroup;
 
 public class Add extends Base {
 
@@ -73,9 +66,6 @@ public class Add extends Base {
 
     private WheelPicker wheel;
 
-
-    private MessageReceiver receiver;
-    private IntentFilter filter;
     private boolean refresh = true;
 
     @Override
@@ -87,7 +77,7 @@ public class Add extends Base {
     @Override
     public void init(@Nullable Bundle savedInstanceState) {
 
-
+        EventBus.getDefault().register(this);
         ActionBar bar = getSupportActionBar();
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
@@ -156,24 +146,25 @@ public class Add extends Base {
                 } else {
 
                     String[] tmp = timestr.split("-");
-                    SimpleDateFormat simpleDateFormat =new SimpleDateFormat("yyyy-MM-dd");
-                    Date date=null;
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    Date date = null;
                     try {
-                         date = simpleDateFormat.parse(tmp[0] + "-" + tmp[1] + "-" + tmp[2]);
-                    }catch(Exception e){
+                        date = simpleDateFormat.parse(tmp[0] + "-" + tmp[1] + "-" + tmp[2]);
+
+                    } catch (Exception e) {
 
                     }
-                    int r=(int)(date.getTime()/1000);
-                    Log.i("tag",r+"");
-                    write.execSQL("insert into money(year,month,day,unix,total,tip,type)values(?,?,?,?,?,?,?)", new String[]{tmp[0], tmp[1], tmp[2], String.valueOf(r),mstr,
+                    int r = (int) (date.getTime() / 1000);
+                    Log.i("tag", r + "");
+                    write.execSQL("insert into money(year,month,day,unix,total,tip,type)values(?,?,?,?,?,?,?)", new String[]{tmp[0], tmp[1], tmp[2], String.valueOf(r), mstr,
                             tstr, String.valueOf(cur)}
                     );
 
-                    Intent i = new Intent("com.dingdangmao.wetouch.REFRESH");
-                    sendBroadcast(i);
+                    EventBus.getDefault().post(new Add());
                     D.tip(Add.this, "添加成功");
                     money.setText("");
                     tip.setText("");
+
                 }
             }
         });
@@ -196,12 +187,6 @@ public class Add extends Base {
                 pvTime.show();
             }
         });
-
-        receiver = new MessageReceiver();
-        filter = new IntentFilter();
-        filter.addAction("com.dingdangmao.wetouch.TAG");
-        registerReceiver(receiver, filter);
-
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -230,7 +215,7 @@ public class Add extends Base {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(receiver);
+        EventBus.getDefault().unregister(this);
     }
 
 
@@ -247,8 +232,8 @@ public class Add extends Base {
             } while (cursor.moveToNext());
         }
         cursor.close();
-        Set<String> myset = type.keySet();
 
+        Set<String> myset = type.keySet();
         final List<String> taglist = new ArrayList<String>();
         taglist.addAll(myset);
         taglist.add("自定义");
@@ -270,13 +255,9 @@ public class Add extends Base {
         outState.putString("tip", tip.getText().toString());
     }
 
-    class MessageReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
 
-            Log.i("tag", "refresh");
-            refresh = true;
-
-        }
+    @Subscribe
+    public void OnTagChange(Tag t) {
+        refresh = true;
     }
 }

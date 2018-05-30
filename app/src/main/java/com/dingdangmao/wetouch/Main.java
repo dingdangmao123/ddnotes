@@ -1,12 +1,8 @@
 package com.dingdangmao.wetouch;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -17,13 +13,14 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
-import android.util.LruCache;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ImageView;
 
 import com.jaeger.library.StatusBarUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,22 +40,18 @@ public class Main extends Base {
     @BindView(R.id.main)
     public RecyclerView rv;
 
-
-
-
+    
     private Adapter app;
     private db mydb = new db(this, "mydb.db", null, 2);
     private ArrayList<Model> mlist = new ArrayList<Model>();
     private HashMap<Integer, String> mytag = new HashMap<Integer, String>();
 
-    private MessageReceiver receiver;
-    private IntentFilter filter;
     private boolean refresh = true;
-
 
     @Override
     public void init(@Nullable Bundle savedInstanceState) {
 
+        EventBus.getDefault().register(this);
         ActionBar bar = getSupportActionBar();
         StatusBarUtil.setColorForDrawerLayout(this, dl, ContextCompat.getColor(this, R.color.colorPrimary));
 
@@ -102,13 +95,7 @@ public class Main extends Base {
 
         });
 
-
-        receiver = new MessageReceiver();
-        filter = new IntentFilter();
-        filter.addAction("com.dingdangmao.wetouch.REFRESH");
-        registerReceiver(receiver, filter);
-
-        app = new Adapter(this,mlist, mytag);
+        app = new Adapter(this, mlist, mytag);
         rv.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
         rv.setAdapter(app);
         rv.setNestedScrollingEnabled(false);
@@ -166,7 +153,7 @@ public class Main extends Base {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(receiver);
+        EventBus.getDefault().unregister(this);
     }
 
 
@@ -184,11 +171,10 @@ public class Main extends Base {
                 int month = cursor.getInt(cursor.getColumnIndex("month"));
                 int day = cursor.getInt(cursor.getColumnIndex("day"));
                 float total = cursor.getFloat(cursor.getColumnIndex("total"));
-                //int unix  = cursor.getInt(cursor.getColumnIndex("total"));
                 int type = cursor.getInt(cursor.getColumnIndex("type"));
                 String tip = cursor.getString(cursor.getColumnIndex("tip"));
-                Log.i("model",id+" ");
-                mlist.add(new Model(dateTounix.To(year, month, day), total, type, tip,id));
+                Log.i("model", id + " ");
+                mlist.add(new Model(dateTounix.To(year, month, day), total, type, tip, id));
 
             } while (cursor.moveToNext());
 
@@ -215,13 +201,9 @@ public class Main extends Base {
         });
     }
 
-    class MessageReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            refresh = true;
-
-        }
+    @Subscribe
+    public void OnAdd(Add ins) {
+        refresh = true;
     }
 
 }
